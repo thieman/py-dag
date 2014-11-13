@@ -8,4 +8,6 @@ setup(name='py-dag',
       author_email='travis.thieman@gmail.com',
       license='MIT',
       packages=['dag'],
+      test_suite='nose.collector',
+      tests_require=['nose'],
       zip_safe=False)
