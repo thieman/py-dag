@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='py-dag',
-      version='0.0.1',
+      version='1.0.0',
       description='Directed acyclic graph implementation',
       url='https://github.com/thieman/py-dag',
       author='Travis Thieman',

@@ -109,7 +109,7 @@ class DAG(object):
         if len(self.ind_nodes(graph)) == 0:
             return (False, 'no independent nodes detected')
         try:
-            self._topological_sort(graph)
+            self.topological_sort(graph)
         except ValueError:
             return (False, 'failed topological sort')
         return (True, 'valid')
@@ -126,7 +126,7 @@ class DAG(object):
         return list(result)
 
 
-    def _topological_sort(self, graph=None):
+    def topological_sort(self, graph=None):
         """ Returns a topological ordering of the DAG.
 
         Raises an error if this is not possible (graph is not valid).
