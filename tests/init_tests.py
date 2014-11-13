@@ -70,7 +70,7 @@ def test_topological_sort():
     dag.from_dict({'a': [],
                    'b': ['a'],
                    'c': ['b']})
-    assert dag._topological_sort() == ['c', 'b', 'a']
+    assert dag.topological_sort() == ['c', 'b', 'a']
 
 
 @with_setup(start_with_graph)
