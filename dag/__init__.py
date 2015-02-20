@@ -63,14 +63,31 @@ class DAG(object):
                     edges.add(new_task_name)
 
 
-    def downstream(self, node, graph):
+    def downstream(self, node, graph=None):
         """ Returns a list of all nodes this node has edges towards. """
         if graph is None:
-            raise Exception("Graph given is None")
-        if node not in self.graph:
+            graph = self.graph
+        if node not in graph:
             raise KeyError('node %s is not in graph' % node)
-        return list(self.graph[node])
+        return list(graph[node])
 
+    def all_downstreams(self, node, graph=None):
+        """Returns a list of all nodes ultimately downstream
+        of the given node in the dependency graph, in
+        topological order."""
+        if graph is None:
+            graph = self.graph
+        nodes = [node]
+        nodes_seen = set()
+        i = 0
+        while i < len(nodes):
+            downstreams = self.downstream(nodes[i], graph)
+            for downstream_node in downstreams:
+                if downstream_node not in nodes_seen:
+                    nodes_seen.add(downstream_node)
+                    nodes.append(downstream_node)
+            i += 1
+        return filter(lambda node: node in nodes_seen, self.topological_sort(graph=graph))
 
     def from_dict(self, graph_dict):
         """ Reset the graph and build it from the passed dictionary.
