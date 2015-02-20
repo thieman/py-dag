@@ -11,7 +11,6 @@ def blank_setup():
     global dag
     dag = DAG()
 
-
 @nottest
 def start_with_graph():
     global dag
@@ -26,14 +25,12 @@ def test_add_node():
     dag.add_node('a')
     assert dag.graph == {'a': set()}
 
-
 @with_setup(blank_setup)
 def test_add_edge():
     dag.add_node('a')
     dag.add_node('b')
     dag.add_edge('a', 'b')
     assert dag.graph == {'a': set('b'), 'b': set()}
-
 
 @with_setup(blank_setup)
 def test_from_dict():
@@ -46,7 +43,6 @@ def test_from_dict():
                          'c': set('d'),
                          'd': set()}
 
-
 @with_setup(blank_setup)
 def test_reset_graph():
     dag.add_node('a')
@@ -54,16 +50,13 @@ def test_reset_graph():
     dag.reset_graph()
     assert dag.graph == {}
 
-
 @with_setup(start_with_graph)
 def test_ind_nodes():
     assert dag.ind_nodes(dag.graph) == ['a']
 
-
 @with_setup(start_with_graph)
 def test_dependent_on():
     assert set(dag._dependencies('d',dag.graph)) == set(['b', 'c'])
-
 
 @with_setup(blank_setup)
 def test_topological_sort():
@@ -72,11 +65,9 @@ def test_topological_sort():
                    'c': ['b']})
     assert dag.topological_sort() == ['c', 'b', 'a']
 
-
 @with_setup(start_with_graph)
 def test_successful_validation():
     assert dag.validate()[0] == True
-
 
 @raises(DAGValidationError)
 @with_setup(blank_setup)
@@ -87,3 +78,20 @@ def test_failed_validation():
 @with_setup(start_with_graph)
 def test_downstream():
     assert set(dag.downstream('a', dag.graph)) == set(['b', 'c'])
+
+@with_setup(start_with_graph)
+def test_all_downstreams():
+    assert dag.all_downstreams('a') == ['c', 'b', 'd']
+    assert dag.all_downstreams('b') == ['d']
+    assert dag.all_downstreams('d') == []
+
+@with_setup(start_with_graph)
+def test_all_downstreams_pass_graph():
+    dag2 = DAG()
+    dag2.from_dict({'a': ['c'],
+                    'b': ['d'],
+                    'c': ['d'],
+                    'd': []})
+    assert dag.all_downstreams('a', dag2.graph) == ['c', 'd']
+    assert dag.all_downstreams('b', dag2.graph) == ['d']
+    assert dag.all_downstreams('d', dag2.graph) == []
