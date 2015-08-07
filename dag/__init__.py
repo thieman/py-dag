@@ -63,6 +63,13 @@ class DAG(object):
                     edges.add(new_task_name)
 
 
+    def predecessors(self, node, graph=None):
+        """ Returns a list of all predecessors of the given node """
+        if graph is None:
+            graph = self.graph
+        return [key for key in graph if node in graph[key]]
+
+
     def downstream(self, node, graph=None):
         """ Returns a list of all nodes this node has edges towards. """
         if graph is None:
