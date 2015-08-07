@@ -98,10 +98,6 @@ def test_all_downstreams_pass_graph():
 
 @with_setup(start_with_graph)
 def test_predecessors():
-    print dag.predecessors('a')
-    print dag.predecessors('b')
-    print dag.predecessors('c')
-    print dag.predecessors('d')
     assert set(dag.predecessors('a')) == set([])
     assert set(dag.predecessors('b')) == set(['a'])
     assert set(dag.predecessors('c')) == set(['a'])
