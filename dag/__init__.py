@@ -96,6 +96,12 @@ class DAG(object):
             i += 1
         return filter(lambda node: node in nodes_seen, self.topological_sort(graph=graph))
 
+    def all_leaves(self, graph=None):
+        """ Return a list of all leaves (nodes with no downstreams) """
+        if graph is None:
+            graph=self.graph
+        return [key for key in graph if not graph[key]]
+
     def from_dict(self, graph_dict):
         """ Reset the graph and build it from the passed dictionary.
 
