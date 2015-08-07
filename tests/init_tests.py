@@ -102,3 +102,7 @@ def test_predecessors():
     assert set(dag.predecessors('b')) == set(['a'])
     assert set(dag.predecessors('c')) == set(['a'])
     assert set(dag.predecessors('d')) == set(['b', 'c'])
+
+@with_setup(start_with_graph)
+def test_all_leaves():
+    assert dag.all_leaves() == ['d']
