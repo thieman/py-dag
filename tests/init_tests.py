@@ -95,3 +95,10 @@ def test_all_downstreams_pass_graph():
     assert dag.all_downstreams('a', dag2.graph) == ['c', 'd']
     assert dag.all_downstreams('b', dag2.graph) == ['d']
     assert dag.all_downstreams('d', dag2.graph) == []
+
+@with_setup(start_with_graph)
+def test_predecessors():
+    assert dag.predecessors('a') == []
+    assert dag.predecessors('b') == ['a']
+    assert dag.predecessors('c') == ['a']
+    assert dag.predecessors('d') == ['b', 'c']
