@@ -11,51 +11,61 @@ class DAG(object):
         self.graph = {}
 
 
-    def add_node(self, node_name):
+    def add_node(self, node_name, graph=None):
         """ Add a node if it does not exist yet, or error out. """
-        if node_name in self.graph:
+        if not graph:
+            graph = self.graph
+        if node_name in graph:
             raise KeyError('node %s already exists' % node_name)
-        self.graph[node_name] = set()
+        graph[node_name] = set()
 
 
-    def delete_node(self, node_name):
+    def delete_node(self, node_name, graph=None):
         """ Deletes this node and all edges referencing it. """
-        if node_name not in self.graph:
+        if not graph:
+            graph = self.graph
+        if node_name not in graph:
             raise KeyError('node %s does not exist' % node_name)
-        self.graph.pop(node_name)
+        graph.pop(node_name)
 
-        for node, edges in self.graph.iteritems():
+        for node, edges in graph.iteritems():
             if node_name in edges:
                 edges.remove(node_name)
 
 
-    def add_edge(self, ind_node, dep_node):
+    def add_edge(self, ind_node, dep_node, graph=None):
         """ Add an edge (dependency) between the specified nodes. """
-        if ind_node not in self.graph or dep_node not in self.graph:
+        if not graph:
+            graph = self.graph
+        if ind_node not in graph or dep_node not in graph:
             raise KeyError('one or more nodes do not exist in graph')
-        test_graph = deepcopy(self.graph)
+        test_graph = deepcopy(graph)
         test_graph[ind_node].add(dep_node)
         is_valid, message = self.validate(test_graph)
         if is_valid:
-            self.graph[ind_node].add(dep_node)
+            graph[ind_node].add(dep_node)
         else:
             raise DAGValidationError()
 
 
     def delete_edge(self, ind_node, dep_node):
         """ Delete an edge from the graph. """
-        if dep_node not in self.graph.get(ind_node, []):
+        if not graph:
+            graph = self.graph
+        if dep_node not in graph.get(ind_node, []):
             raise KeyError('this edge does not exist in graph')
-        self.graph[ind_node].remove(dep_node)
+        graph[ind_node].remove(dep_node)
 
 
     def rename_edges(self, old_task_name, new_task_name):
         """ Change references to a task in existing edges. """
-        for node, edges in self.graph.iteritems():
+        if not graph:
+            graph = self.graph
+        for node, edges in graph.iteritems():
 
             if node == old_task_name:
-                self.graph[new_task_name] = copy(edges)
-                del self.graph[old_task_name]
+                graph[new_task_name] = copy(edges)
+                del graph[old_task_name]
 
             else:
                 if old_task_name in edges:
