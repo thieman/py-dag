@@ -48,7 +48,7 @@ class DAG(object):
             raise DAGValidationError()
 
 
-    def delete_edge(self, ind_node, dep_node):
+    def delete_edge(self, ind_node, dep_node, graph=None):
         """ Delete an edge from the graph. """
         if not graph:
             graph = self.graph
@@ -57,7 +57,7 @@ class DAG(object):
         graph[ind_node].remove(dep_node)
 
 
-    def rename_edges(self, old_task_name, new_task_name):
+    def rename_edges(self, old_task_name, new_task_name, graph=None):
         """ Change references to a task in existing edges. """
         if not graph:
             graph = self.graph
