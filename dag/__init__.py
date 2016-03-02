@@ -71,7 +71,7 @@ class DAG(object):
         """ Change references to a task in existing edges. """
         if not graph:
             graph = self.graph
-        for node, edges in graph.iteritems():
+        for node, edges in graph.items():
 
             if node == old_task_name:
                 graph[new_task_name] = copy(edges)
