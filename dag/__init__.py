@@ -9,6 +9,7 @@ except:
 class DAGValidationError(Exception):
     pass
 
+
 class DAG(object):
     """ Directed acyclic graph implementation. """
 
@@ -62,7 +63,6 @@ class DAG(object):
         else:
             raise DAGValidationError()
 
-
     def delete_edge(self, ind_node, dep_node, graph=None):
         """ Delete an edge from the graph. """
         if not graph:
@@ -70,7 +70,6 @@ class DAG(object):
         if dep_node not in graph.get(ind_node, []):
             raise KeyError('this edge does not exist in graph')
         graph[ind_node].remove(dep_node)
-
 
     def rename_edges(self, old_task_name, new_task_name, graph=None):
         """ Change references to a task in existing edges. """
@@ -87,13 +86,11 @@ class DAG(object):
                     edges.remove(old_task_name)
                     edges.add(new_task_name)
 
-
     def predecessors(self, node, graph=None):
         """ Returns a list of all predecessors of the given node """
         if graph is None:
             graph = self.graph
         return [key for key in graph if node in graph[key]]
-
 
     def downstream(self, node, graph=None):
         """ Returns a list of all nodes this node has edges towards. """
@@ -124,7 +121,7 @@ class DAG(object):
     def all_leaves(self, graph=None):
         """ Return a list of all leaves (nodes with no downstreams) """
         if graph is None:
-            graph=self.graph
+            graph = self.graph
         return [key for key in graph if not graph[key]]
 
     def from_dict(self, graph_dict):
@@ -141,7 +138,6 @@ class DAG(object):
                 raise TypeError('dict values must be lists')
             for dep_node in dep_nodes:
                 self.add_edge(ind_node, dep_node)
-
 
     def reset_graph(self):
         """ Restore the graph to an empty state. """
@@ -166,7 +162,6 @@ class DAG(object):
             return (False, 'failed topological sort')
         return (True, 'valid')
 
-
     def _dependencies(self, target_node, graph):
         """ Returns a list of all nodes from incoming edges. """
         if graph is None:
@@ -176,7 +171,6 @@ class DAG(object):
             if target_node in outgoing_nodes:
                 result.add(node)
         return list(result)
-
 
     def topological_sort(self, graph=None):
         """ Returns a topological ordering of the DAG.
