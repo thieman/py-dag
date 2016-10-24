@@ -192,3 +192,6 @@ class DAG(object):
         if len(l) != len(graph.keys()):
             raise ValueError('graph is not acyclic')
         return l
+
+    def size(self):
+        return len(self.graph)
