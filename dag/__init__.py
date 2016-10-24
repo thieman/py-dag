@@ -1,5 +1,11 @@
 from copy import copy, deepcopy
 
+try:
+    from collections import OrderedDict
+except:
+    from ordereddict import OrderedDict
+
+
 class DAGValidationError(Exception):
     pass
 
@@ -8,8 +14,7 @@ class DAG(object):
 
     def __init__(self):
         """ Construct a new DAG with no nodes or edges. """
-        self.graph = {}
-
+        self.reset_graph()
 
     def add_node(self, node_name, graph=None):
         """ Add a node if it does not exist yet, or error out. """
@@ -140,18 +145,15 @@ class DAG(object):
 
     def reset_graph(self):
         """ Restore the graph to an empty state. """
-        self.graph = {}
+        self.graph = OrderedDict()
 
-
-    def ind_nodes(self, graph):
+    def ind_nodes(self, graph=None):
         """ Returns a list of all nodes in the graph with no dependencies. """
         if graph is None:
-            raise Exception("Graph given is None")
-        all_nodes, dependent_nodes = set(graph.keys()), set()
-        for downstream_nodes in graph.itervalues():
-            [dependent_nodes.add(node) for node in downstream_nodes]
-        return list(all_nodes - dependent_nodes)
+            graph = self.graph
 
+        dependent_nodes = set(node for dependents in graph.itervalues() for node in dependents)
+        return [node for node in graph.keys() if node not in dependent_nodes]
 
     def validate(self, graph=None):
         """ Returns (Boolean, message) of whether DAG is valid. """
