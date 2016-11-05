@@ -106,3 +106,9 @@ def test_predecessors():
 @with_setup(start_with_graph)
 def test_all_leaves():
     assert dag.all_leaves() == ['d']
+
+@with_setup(start_with_graph)
+def test_size():
+    assert dag.size() == 4
+    dag.delete_node('a')
+    assert dag.size() == 3
