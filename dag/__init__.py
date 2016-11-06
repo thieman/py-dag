@@ -1,5 +1,5 @@
 from copy import copy, deepcopy
-from collections import deque
+from collections import deque, defaultdict
 
 try:
     from collections import OrderedDict
