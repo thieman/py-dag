@@ -1,4 +1,5 @@
 from copy import copy, deepcopy
+from collections import deque
 
 try:
     from collections import OrderedDict
@@ -162,36 +163,40 @@ class DAG(object):
             return (False, 'failed topological sort')
         return (True, 'valid')
 
-    def _dependencies(self, target_node, graph):
-        """ Returns a list of all nodes from incoming edges. """
-        if graph is None:
-            raise Exception("Graph given is None")
-        result = set()
-        for node, outgoing_nodes in graph.iteritems():
-            if target_node in outgoing_nodes:
-                result.add(node)
-        return list(result)
-
     def topological_sort(self, graph=None):
         """ Returns a topological ordering of the DAG.
 
         Raises an error if this is not possible (graph is not valid).
         """
-        graph = deepcopy(graph if graph is not None else self.graph)
-        l = []
-        q = deepcopy(self.ind_nodes(graph))
-        while len(q) != 0:
-            n = q.pop(0)
-            l.append(n)
-            iter_nodes = deepcopy(graph[n])
-            for m in iter_nodes:
-                graph[n].remove(m)
-                if len(self._dependencies(m, graph)) == 0:
-                    q.append(m)
+        if graph is None:
+            graph = self.graph
 
-        if len(l) != len(graph.keys()):
+        in_degree = {}
+        for u in graph:
+            in_degree[u] = 0
+
+        for u in graph:
+            for v in graph[u]:
+                in_degree[v] += 1
+
+        queue = deque()
+        for u in in_degree:
+            if in_degree[u] == 0:
+                queue.appendleft(u)
+
+        l = []
+        while queue:
+            u = queue.pop()
+            l.append(u)
+            for v in graph[u]:
+                in_degree[v] -= 1
+                if in_degree[v] == 0:
+                    queue.appendleft(v)
+
+        if len(l) == len(graph):
+            return l
+        else:
             raise ValueError('graph is not acyclic')
-        return l
 
     def size(self):
         return len(self.graph)

@@ -54,10 +54,6 @@ def test_reset_graph():
 def test_ind_nodes():
     assert dag.ind_nodes(dag.graph) == ['a']
 
-@with_setup(start_with_graph)
-def test_dependent_on():
-    assert set(dag._dependencies('d',dag.graph)) == set(['b', 'c'])
-
 @with_setup(blank_setup)
 def test_topological_sort():
     dag.from_dict({'a': [],
