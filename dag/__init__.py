@@ -1,5 +1,5 @@
 from copy import copy, deepcopy
-from collections import deque, defaultdict
+from collections import deque
 
 try:
     from collections import OrderedDict
@@ -171,7 +171,9 @@ class DAG(object):
         if graph is None:
             graph = self.graph
 
-        in_degree = defaultdict(int)
+        in_degree = {}
+        for u in graph:
+            in_degree[u] = 0
 
         for u in graph:
             for v in graph[u]:
