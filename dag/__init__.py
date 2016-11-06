@@ -171,7 +171,7 @@ class DAG(object):
         if graph is None:
             graph = self.graph
 
-        in_degree = { u : 0 for u in graph }
+        in_degree = defaultdict(int)
 
         for u in graph:
             for v in graph[u]:
