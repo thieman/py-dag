@@ -1,9 +1,13 @@
-from setuptools import setup
 import sys
-install_requires = []
+
+from setuptools import setup
+
 python_ver = sys.version_info
+
+install_requires = []
+
 if python_ver.major == 2 and python_ver.minor < 7:
-    install_requires = ['ordereddict']
+    install_requires += ['ordereddict']
 
 setup(name='py-dag',
       version='2.5.0',

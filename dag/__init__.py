@@ -1,9 +1,11 @@
 from copy import copy, deepcopy
 from collections import deque
 
+from . import six_subset as six
+
 try:
     from collections import OrderedDict
-except:
+except ImportError:
     from ordereddict import OrderedDict
 
 
@@ -40,7 +42,7 @@ class DAG(object):
             raise KeyError('node %s does not exist' % node_name)
         graph.pop(node_name)
 
-        for node, edges in graph.iteritems():
+        for node, edges in six.iteritems(graph):
             if node_name in edges:
                 edges.remove(node_name)
 
@@ -117,7 +119,12 @@ class DAG(object):
                     nodes_seen.add(downstream_node)
                     nodes.append(downstream_node)
             i += 1
-        return filter(lambda node: node in nodes_seen, self.topological_sort(graph=graph))
+        return list(
+            filter(
+                lambda node: node in nodes_seen,
+                self.topological_sort(graph=graph)
+            )
+        )
 
     def all_leaves(self, graph=None):
         """ Return a list of all leaves (nodes with no downstreams) """
@@ -132,9 +139,9 @@ class DAG(object):
         """
 
         self.reset_graph()
-        for new_node in graph_dict.iterkeys():
+        for new_node in six.iterkeys(graph_dict):
             self.add_node(new_node)
-        for ind_node, dep_nodes in graph_dict.iteritems():
+        for ind_node, dep_nodes in six.iteritems(graph_dict):
             if not isinstance(dep_nodes, list):
                 raise TypeError('dict values must be lists')
             for dep_node in dep_nodes:
@@ -149,7 +156,9 @@ class DAG(object):
         if graph is None:
             graph = self.graph
 
-        dependent_nodes = set(node for dependents in graph.itervalues() for node in dependents)
+        dependent_nodes = set(
+            node for dependents in six.itervalues(graph) for node in dependents
+        )
         return [node for node in graph.keys() if node not in dependent_nodes]
 
     def validate(self, graph=None):
