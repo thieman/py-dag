@@ -6,7 +6,8 @@ python_ver = sys.version_info
 
 install_requires = []
 
-if python_ver.major == 2 and python_ver.minor < 7:
+# Do not use the attribute names as they are not available in Python 2.6.
+if python_ver[0] == 2 and python_ver[1] < 7:
     install_requires += ['ordereddict']
 
 setup(name='py-dag',
