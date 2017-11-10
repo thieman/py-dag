@@ -11,7 +11,7 @@ if python_ver[0] == 2 and python_ver[1] < 7:
     install_requires += ['ordereddict']
 
 setup(name='py-dag',
-      version='3.0.0',
+      version='3.0.1',
       description='Directed acyclic graph implementation',
       url='https://github.com/thieman/py-dag',
       author='Travis Thieman',
