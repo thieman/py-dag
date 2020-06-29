@@ -38,6 +38,27 @@ def test_add_edge():
 
 
 @with_setup(blank_setup)
+def test_add_edge():
+    dag.add_node(1)
+    dag.add_node(2)
+    dag.add_edge(1, 2)
+    assert dag.graph == {1: {2}, 2: set()}
+
+
+@with_setup(blank_setup)
+def test_add_edge_people():
+    class Person:
+      def __init__(self, first_name):
+        self.first_name = first_name
+    p1 = Person("paula")
+    p2 = Person("drew")
+    dag.add_node(p1)
+    dag.add_node(p2)
+    dag.add_edge(p1, p2)
+    assert dag.graph == {p1: {p2}, p2: set()}
+
+
+@with_setup(blank_setup)
 def test_from_dict():
     dag.from_dict({'a': ['b', 'c'],
                    'b': ['d'],
@@ -78,8 +99,7 @@ def test_successful_validation():
 @raises(DAGValidationError)
 @with_setup(blank_setup)
 def test_failed_validation():
-    dag.from_dict({'a': ['b'],
-                   'b': ['a']})
+    dag.from_dict({'a': ['b'], 'b': ['a']})
 
 
 @with_setup(start_with_graph)

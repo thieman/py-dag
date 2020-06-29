@@ -58,7 +58,7 @@ class DAG(object):
             graph = self.graph
         if ind_node not in graph or dep_node not in graph:
             raise KeyError('one or more nodes do not exist in graph')
-        test_graph = deepcopy(graph)
+        test_graph = graph.copy()
         test_graph[ind_node].add(dep_node)
         is_valid, message = self.validate(test_graph)
         if is_valid:
